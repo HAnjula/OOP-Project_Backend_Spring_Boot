@@ -38,7 +38,7 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
         String result = userService.logInUser(dto);
-        return new ResponseEntity<>(new StandardResponse(202, result, result),
-                HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new StandardResponse(200, result, result),
+                HttpStatus.OK);
     }
 }
