@@ -14,7 +14,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/user")
-@CrossOrigin(origins = "*")  // Customize the origins if needed
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -23,18 +23,18 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<StandardResponse> signUp(@Valid @RequestBody UserDTO dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(new StandardResponse(400, "Validation Error", bindingResult.getAllErrors()),
+            return new ResponseEntity<>(new StandardResponse(400, "Invalid Data Entered", bindingResult.getAllErrors()),
                     HttpStatus.BAD_REQUEST);
         }
         String result = userService.signUpUser(dto);
-        return new ResponseEntity<>(new StandardResponse(201, result + " saved", result),
+        return new ResponseEntity<>(new StandardResponse(201, result + " Signed Up Successfully", result),
                 HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<StandardResponse> logIn(@Valid @RequestBody UserDTOLogIn dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(new StandardResponse(400, "Validation Error", bindingResult.getAllErrors()),
+            return new ResponseEntity<>(new StandardResponse(400, "Invalid Data Entered", bindingResult.getAllErrors()),
                     HttpStatus.BAD_REQUEST);
         }
         String result = userService.logInUser(dto);
