@@ -8,6 +8,7 @@ import com.oop.websignup.POS.exception.NotFoundExc;
 import com.oop.websignup.POS.exception.UserExistsExc;
 import com.oop.websignup.POS.repo.UserRepo;
 import com.oop.websignup.POS.service.UserService;
+import com.oop.websignup.POS.util.PasswordHash;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,7 +26,10 @@ public class UserServiceImpl implements UserService {
         if (repo.existsById(dto.getEmail())) {
             throw new UserExistsExc("Email already exists!");
         }
-        User user = new User(dto.getEmail(), dto.getName(), dto.getContactNumber(), dto.getPassword());
+
+        // Hash the password before saving
+        String hashedPassword = PasswordHash.hashPassword(dto.getPassword());
+        User user = new User(dto.getEmail(), dto.getName(), dto.getContactNumber(), hashedPassword);
         return repo.save(user).getName();
     }
 
@@ -33,7 +37,9 @@ public class UserServiceImpl implements UserService {
     public String logInUser(UserDTOLogIn dto) {
         Optional<User> e = repo.findById(dto.getEmail());
         if (e.isPresent()) {
-            if (dto.getPassword().equals(e.get().getPassword())) {
+            User user = e.get();
+            // Check the password using PasswordUtils
+            if (PasswordHash.checkPassword(dto.getPassword(), user.getPassword())) {
                 return "Successfully logged in!";
             } else {
                 throw new InvalidPassExc("Wrong Password, Try Again!");

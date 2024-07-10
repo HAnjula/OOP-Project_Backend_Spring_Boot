@@ -17,7 +17,7 @@ public class UserDTO {
     private String name;
 
     @NotBlank(message = "Contact number is mandatory")
-    @Size(min = 5, max = 11, message = "Contact number must be between 5 and 11 characters")
+    @Size( max = 11, message = "Contact number must be below 11 characters")
     private String contactNumber;
 
     @NotBlank(message = "Password is mandatory")
